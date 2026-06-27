@@ -1,0 +1,5 @@
+kernel=kernel7.img
+arm_64bit=0
+disable_splash=1
+force_turbo=0
+core_freq=250
