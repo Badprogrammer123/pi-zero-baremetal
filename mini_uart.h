@@ -54,7 +54,7 @@ typedef struct mini_uart_data_settings {
 typedef struct mini_uart_settings{
 	unsigned int baud_rate;
 	unsigned int tx_enable;
-       	unsigned int rx_enable;	
+    unsigned int rx_enable;	
 	unsigned fifo_disable; 
 	struct mini_uart_data_settings *data_settings; 
 }set_mini_uart;
@@ -74,11 +74,6 @@ void transmit_send(volatile unsigned int * uart_regs, int char_count, char *str 
 
 }
 
-void receive(volatile unsigned int * uart_regs){
-//have to finish should I store stuff in ram what do I do other than clear as it gets full	
-}
-
-
 
 volatile unsigned int *set_uart(set_mini_uart * mini_set){
         //GPIO pins set to ALT5
@@ -87,18 +82,18 @@ volatile unsigned int *set_uart(set_mini_uart * mini_set){
         volatile unsigned int *set_pin_mode = (volatile unsigned int *) GPFSEL1;
         volatile unsigned int  baudrate = 250000000 / (8 * (mini_set->baud_rate + 1));
 	
-	//Clear GPIO 14 and 15
+		//Clear GPIO 14 and 15
         *set_pin_mode &= ~(GPIO14_CLEAR | GPIO15_CLEAR);
 	
-	//ALT5 GPIO 14 and 15 (RX_UART1 and TX_UART1) 
+		//ALT5 GPIO 14 and 15 (RX_UART1 and TX_UART1) 
         *set_pin_mode |= GPIO14_TX_MODE ;
         *set_pin_mode |= GPIO15_RX_MODE ;
         
 
-	//Enable UART1 required to access and configure registers
-	*(uart_regs + AUX_ENABLE_REG) |= AUX_ENABLE_UART1;
+		//Enable UART1 required to access and configure registers
+		*(uart_regs + AUX_ENABLE_REG) |= AUX_ENABLE_UART1;
         
-	//Disable tx and rx to config
+		//Disable tx and rx to config
         *(uart_regs + AUX_MU_STAT_REG) &= ~(AUX_MU_CNTL_RX_ENABLE  | AUX_MU_CNTL_RX_ENABLE );
 	
         *(uart_regs) |= baudrate;
@@ -110,7 +105,7 @@ volatile unsigned int *set_uart(set_mini_uart * mini_set){
 
         *(uart_regs + AUX_MU_IIR_REG) &= mini_set->fifo_disable == 0 ? AUX_MU_IIR_FIFO_ENABLE : ~(AUX_MU_IIR_FIFO_DISABLE);
 	
-	*(uart_regs + AUX_MU_IIR_REG) |= mini_set->fifo_disable == 0 ? AUX_MU_IIR_CLEAR_TX_FIFO | AUX_MU_IIR_CLEAR_RX_FIFO : 0; 
+		*(uart_regs + AUX_MU_IIR_REG) |= mini_set->fifo_disable == 0 ? AUX_MU_IIR_CLEAR_TX_FIFO | AUX_MU_IIR_CLEAR_RX_FIFO : 0; 
 
         *(uart_regs + AUX_MU_CNTL_REG) |= mini_set->tx_enable | mini_set->rx_enable;
 
