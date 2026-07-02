@@ -14,9 +14,10 @@ SECTIONS
 		*(.text)
 
 	}	
+
 	.data : {
 		*(.data)
-	}
+	} 
 	__bss_start = . ;
 
 	.bss : {
@@ -24,7 +25,11 @@ SECTIONS
 		*(COMMON)
 	}
 	 __bss_end = . ;
-
+	
+	.rodata : { 
+		*(.rodata) 
+	}
+	
 
 	__stack_top = ORIGIN(RAM) + LENGTH(RAM); 
 
