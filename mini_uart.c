@@ -36,6 +36,7 @@ void uart1_puts(int char_count, volatile char *str ){
 }
 
 void uart1_putc(volatile char character){
+	while((AUX_BASE(AUX_MU_STAT_REG) & (1 << 0)) == 0);	
 	AUX_BASE(AUX_MU_IO_REG) = character;
 }
 
@@ -70,16 +71,20 @@ set_mini_uart * uart1_init(set_mini_uart * mini_set){
 	
 	//Disable or Leave FIFO enabled
         AUX_BASE(AUX_MU_IIR_REG) &= mini_set->fifo_enable == 1 ? AUX_MU_IIR_FIFO_ENABLE : AUX_MU_IIR_FIFO_DISABLE;	
-	
-	//Re-enable RX or/and TX 
+	/
+	//Enable TX and RX interrupts
+	AUX_BASE(AUX_MU_IER_REG) |= AUX_MU_IER_TX_INTERRUPT_ENABLE | AUX_MU_IER_RX_INTERRUPT_ENABLE; 
+
+
+	//Re-enable RX or/and TX
         AUX_BASE(AUX_MU_CNTL_REG) |= mini_set->tx_enable | mini_set->rx_enable;
+
 
 	return mini_set; 
 }
 
 void mini_uart_driver_setup(){
         set_mini_uart * mini_set = uart1_init(NULL);
-//        uart1_puts(mini_set->data_settings->data_size, mini_set->data_settings->data);
 	uart1_putc('a');
 	
 

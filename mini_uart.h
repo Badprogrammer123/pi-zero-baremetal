@@ -1,17 +1,15 @@
 #include <stddef.h>
+#include "gpio.h"
+
 
 #ifndef MINI_UART_H
 
 #define MINI_UART_H
 
-#include "gpio.h"
 
-
-/* Base addresses */
+/* Base AUX address */
 
 #define AUX_BASE(offset)      (*(volatile unsigned int *) (0x3F215000 + offset))
-#define GPIO_BASE       (*(volatile unsigned int *) 0x3F200000) 
-#define GPFSEL1 	 (*(volatile unsigned int *) 0x3F200004)
 
 /* Mini UART register offsets */
 
@@ -53,6 +51,11 @@
 #define AUX_MU_IIR_CLEAR_TX_FIFO  (1 << 2) //Clear FIFO transmitter symbols
 #define AUX_MU_IIR_FIFO_ENABLE    (3 << 6) //FIFO RX and TX are both already enabled for BCM2835 default use this to re-enable FIFO in case it's off 
 #define AUX_MU_IIR_FIFO_DISABLE  ~(3 << 6)
+
+/* Mini UARt IER bits */
+#define AUX_MU_IER_TX_INTERRUPT_ENABLE (1 << 1)
+#define AUX_MU_IER_RX_INTERRUPT_ENABLE (1 << 0)
+
 
 /* BAUD RATE CALCULATOR */
 
