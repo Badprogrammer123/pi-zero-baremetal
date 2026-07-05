@@ -17,3 +17,5 @@
 
 
 #endif
+
+void interrupt_enable();

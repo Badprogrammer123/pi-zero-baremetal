@@ -98,3 +98,4 @@ void uart1_putc(volatile char character);
 volatile char uart1_getc();
 set_mini_uart * uart1_init(set_mini_uart * mini_set);
 void mini_uart_driver_setup();
+void uart1_write_int(volatile unsigned int value);

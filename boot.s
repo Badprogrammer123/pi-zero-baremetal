@@ -6,6 +6,6 @@
 
 
 _start:
-	mov r0, #666
+	
 	ldr sp, =__stack_top
 	b kernel_main

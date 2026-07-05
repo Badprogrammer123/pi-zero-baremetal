@@ -44,6 +44,14 @@ volatile char uart1_getc(){
 	return AUX_BASE(AUX_MU_IO_REG);
 }
 
+void uart1_write_int(volatile unsigned int value){
+	volatile char hex[] = "0123456789ABCDEF";
+	for(int i = 28; i >= 0; i -= 4) {
+		 AUX_BASE(AUX_MU_IO_REG) = hex[(value >> i)& 0xF];
+	}
+}
+	
+
 set_mini_uart * uart1_init(set_mini_uart * mini_set){
         
 	if(mini_set == NULL) mini_set = &default_uart1_sett;
@@ -71,10 +79,11 @@ set_mini_uart * uart1_init(set_mini_uart * mini_set){
 	
 	//Disable or Leave FIFO enabled
         AUX_BASE(AUX_MU_IIR_REG) &= mini_set->fifo_enable == 1 ? AUX_MU_IIR_FIFO_ENABLE : AUX_MU_IIR_FIFO_DISABLE;	
-	/
+	
 	//Enable TX and RX interrupts
 	AUX_BASE(AUX_MU_IER_REG) |= AUX_MU_IER_TX_INTERRUPT_ENABLE | AUX_MU_IER_RX_INTERRUPT_ENABLE; 
-
+	
+	AUX_BASE(AUX_MU_IIR_REG) &= (0<<0); 
 
 	//Re-enable RX or/and TX
         AUX_BASE(AUX_MU_CNTL_REG) |= mini_set->tx_enable | mini_set->rx_enable;
@@ -86,7 +95,6 @@ set_mini_uart * uart1_init(set_mini_uart * mini_set){
 void mini_uart_driver_setup(){
         set_mini_uart * mini_set = uart1_init(NULL);
 	uart1_putc('a');
-	
 
 }
 

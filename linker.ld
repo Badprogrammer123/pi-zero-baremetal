@@ -2,7 +2,7 @@ ENTRY(_start)
 
 MEMORY 
 {
-	RAM(wx) : ORIGIN = 0x8000, LENGTH =64M
+	RAM(rwx) : ORIGIN = 0x8000, LENGTH =437868K
       
 }
 
@@ -30,8 +30,15 @@ SECTIONS
 		*(.rodata) 
 	}
 	
+    	__stack_top = ORIGIN(RAM) + LENGTH(RAM);
 
-	__stack_top = ORIGIN(RAM) + LENGTH(RAM); 
+	.vector_base_table : {
+		. = LENGTH(RAM) - 8000; 
+		. = ALIGN(32);
+		__vector_base_table_start = . ;
+		
+		__vector_base_table_end = . + 2000000;  
+	}
 
 }
 
