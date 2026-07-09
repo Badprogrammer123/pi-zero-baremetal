@@ -2,7 +2,7 @@
 I will document my bare metal journey using the Raspberry Pi Zero 2 W.
 
 ## Progress
-* Working on Understanding Interrupts and enabling them (Using the Cortex-a53 documentation also learning how to navigate it)
+* Working on Understanding Interrupts and enabling them
 
 ### Finished
 
